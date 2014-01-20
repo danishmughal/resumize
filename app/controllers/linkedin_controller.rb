@@ -6,11 +6,19 @@ class LinkedinController < ApplicationController
         :authorize_path => '/uas/oauth/authenticate',
         :request_token_path =>'/uas/oauth/requestToken?scope=r_basicprofile+r_fullprofile+r_emailaddress+r_network+r_contactinfo',
         :access_token_path => '/uas/oauth/accessToken' }
-    @linkedin_client = LinkedIn::Client.new(key, secret,linkedin_configuration )
+    @linkedin_client = LinkedIn::Client.new(key, secret,linkedin_configuration)
+  end
+
+  def processed
+  	init_client
+    @linkedin_client.authorize_from_access(session[:atoken], session[:asecret])
+
+    @c = session[:linkedin_client]
+    @profile1 = @c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
   end
  
   def auth
-    init_client
+    init_client # Initialize settings defined above in the method
     request_token = @linkedin_client.request_token(:oauth_callback => "http://#{request.host_with_port}/linkedin/callback")
     session[:rtoken] = request_token.token
     session[:rsecret] = request_token.secret
@@ -41,11 +49,17 @@ class LinkedinController < ApplicationController
     profile_3 = c.profile(:fields=>["languages","skills","certifications","educations"])
     
     puts "profile_3 = #{profile_3}"
- 
- 
-    session[:atoken] = nil
-    session[:asecret] = nil
-    redirect_to root_path(:imported_from_linkedin=>"success")
+
+    session[:linkedin_client] = c
+
+    redirect_to processed_path(:imported_from_linkedin=>"success")
+  end
+
+  def destroy
+  	  session[:atoken] = nil
+      session[:asecret] = nil
+    	session[:linkedin_client] = nil
+    	redirect_to root_path
   end
 
 end

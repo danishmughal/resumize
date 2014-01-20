@@ -41,7 +41,11 @@ gem "linkedin"
 
 group :development do
   gem "better_errors" # better error messages
+  gem "binding_of_caller"
 end
+
+# Active record sessions rather than cookies
+gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
 # =============================
 

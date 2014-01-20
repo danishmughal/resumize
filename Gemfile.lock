@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/rails/activerecord-session_store.git
+  revision: 55dc59aff9a1101c52004c0604bb88418624ba96
+  specs:
+    activerecord-session_store (0.1.0)
+      actionpack (>= 4.0.0, < 5)
+      activerecord (>= 4.0.0, < 5)
+      railties (>= 4.0.0, < 5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -30,6 +39,8 @@ GEM
     better_errors (1.1.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     builder (3.1.4)
     coderay (1.1.0)
     coffee-rails (4.0.1)
@@ -39,6 +50,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    debug_inspector (0.0.2)
     docxtor (0.2.1)
       builder
       rubytree
@@ -127,7 +139,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-session_store!
   better_errors
+  binding_of_caller
   coffee-rails (~> 4.0.0)
   docxtor (~> 0.2.1)
   jbuilder (~> 1.2)

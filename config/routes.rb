@@ -6,6 +6,8 @@ Resumize::Application.routes.draw do
   # Routes settings for LinkedIn Controller
   get '/linkedin/auth'      => 'linkedin#auth'
   get '/linkedin/callback'  => 'linkedin#callback'
+  get '/processed' => 'linkedin#processed'
+  get '/logout' => 'linkedin#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
