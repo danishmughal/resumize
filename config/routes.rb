@@ -1,5 +1,12 @@
 Resumize::Application.routes.draw do
-  root to: 'main#home'
+
+  # Home page path
+  root to: 'main#home' 
+
+  # Routes settings for LinkedIn Controller
+  get '/linkedin/auth'      => 'linkedin#auth'
+  get '/linkedin/callback'  => 'linkedin#callback'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
