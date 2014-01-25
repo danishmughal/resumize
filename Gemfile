@@ -47,6 +47,10 @@ end
 # Active record sessions rather than cookies
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
+gem 'doccy-api', '~> 0.0.3'
+
+gem 'httparty'
+
 # =============================
 
 # Use ActiveModel has_secure_password

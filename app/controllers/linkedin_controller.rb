@@ -11,8 +11,6 @@ class LinkedinController < ApplicationController
 
   def processed
   	init_client
-    @linkedin_client.authorize_from_access(session[:atoken], session[:asecret])
-
     @c = session[:linkedin_client]
     @profile1 = @c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
   end
@@ -36,30 +34,42 @@ class LinkedinController < ApplicationController
       @linkedin_client.authorize_from_access(session[:atoken], session[:asecret])
     end
  
-    c = @linkedin_client
-    
-    profile_1 = c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
- 
-    puts "profile_1 = #{profile_1}"
- 
-    profile_2 = c.profile(:fields=>["positions","three_current_positions","three_past_positions","publications","patents"])
- 
-    puts "profile_2 = #{profile_2}"
- 
-    profile_3 = c.profile(:fields=>["languages","skills","certifications","educations"])
-    
-    puts "profile_3 = #{profile_3}"
-
-    session[:linkedin_client] = c
-
+    session[:linkedin_client] = @linkedin_client
     redirect_to processed_path(:imported_from_linkedin=>"success")
   end
 
   def destroy
-  	  session[:atoken] = nil
-      session[:asecret] = nil
-    	session[:linkedin_client] = nil
-    	redirect_to root_path
+	  session[:atoken] = nil
+    session[:asecret] = nil
+  	session[:linkedin_client] = nil
+  	redirect_to root_path
+  end
+
+  def doctest
+  	require 'open-uri'
+
+  	email = URI::encode("afridi2@illinois.edu")
+  	password = URI::encode("tempword")
+
+		@response = HTTParty.post("https://www.doccyapp.com/api/1/sessions.json?email=#{email}&password=#{password}")
+		token = @response['response']['auth_token']
+		account_id = @response['response']['account_id']
+
+		@template = HTTParty.get("https://www.doccyapp.com/api/1/templates.json?auth_token=#{token}")
+		template_id = @template['response'].first['template']['id']
+
+		@documentresponse = HTTParty.post("https://www.doccyapp.com/api/1/templates/#{template_id}/documents.json", 
+		    :body => { 
+		    	:document => {
+		               :name => 'Document name goes here', 
+		               :content => {
+		               		:name => 'Persons name', 
+		               		:company => 'company goes here', 
+		               	}
+		      }
+		    }.to_json,
+		    :headers => { 'Content-Type' => 'application/json' } )
+
   end
 
 end
