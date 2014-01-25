@@ -8,7 +8,7 @@ Resumize::Application.routes.draw do
   get '/linkedin/callback'  => 'linkedin#callback'
   get '/processed' => 'linkedin#processed'
   get '/logout' => 'linkedin#destroy'
-  get '/doctest' => 'linkedin#doctest'
+  get '/download' => 'linkedin#download'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

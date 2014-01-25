@@ -1,7 +1,53 @@
-profile processed, docx should be downloaded here.
-
 <%= @c %>
-
-<br />
-
 <%= @profile1 %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Your resume - Resumize</title>
+
+    <!-- Custom Google Web Font -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body style="background:url('/assets/intro-bg.jpg')">
+
+    <div class="intro-header">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Your resume is ready</h1>
+                        <h3>Your docx resume has been generated - click the button below to download!</h3>
+                        <hr class="intro-divider">
+                        <ul class="list-inline intro-social-buttons">
+                            <li>
+	                            <%= link_to :controller => :linkedin, :action => :download do %>
+		                            	<i class="fa fa-linkedin fa-fw"></i> 
+		                            	<span class="network-name">Download</span>
+	                            <% end %>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+<p class="copyright text-muted small">Created by <a href="http://breakfasthack.com"> Danish A. Mughal </a> and <a href="http://hackiton.com"> Ali K. Afridi </a></p>
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.intro-header -->
+
+
+</body>
+
+</html>

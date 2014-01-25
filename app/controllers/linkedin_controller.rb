@@ -15,6 +15,10 @@ class LinkedinController < ApplicationController
     @profile1 = @c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
   end
  
+  def download
+  	send_file("#{Rails.root}/app/assets/docs/template.docx")
+  end
+
   def auth
     init_client # Initialize settings defined above in the method
     request_token = @linkedin_client.request_token(:oauth_callback => "http://#{request.host_with_port}/linkedin/callback")
@@ -44,32 +48,5 @@ class LinkedinController < ApplicationController
   	session[:linkedin_client] = nil
   	redirect_to root_path
   end
-
-  def doctest
-  	require 'open-uri'
-
-  	email = URI::encode("afridi2@illinois.edu")
-  	password = URI::encode("tempword")
-
-		@response = HTTParty.post("https://www.doccyapp.com/api/1/sessions.json?email=#{email}&password=#{password}")
-		token = @response['response']['auth_token']
-		account_id = @response['response']['account_id']
-
-		@template = HTTParty.get("https://www.doccyapp.com/api/1/templates.json?auth_token=#{token}")
-		template_id = @template['response'].first['template']['id']
-
-		@documentresponse = HTTParty.post("https://www.doccyapp.com/api/1/templates/#{template_id}/documents.json", 
-		    :body => { 
-		    	:document => {
-		               :name => 'Document name goes here', 
-		               :content => {
-		               		:name => 'Persons name', 
-		               		:company => 'company goes here', 
-		               	}
-		      }
-		    }.to_json,
-		    :headers => { 'Content-Type' => 'application/json' } )
-
-  end
-
+  
 end
