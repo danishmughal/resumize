@@ -13,10 +13,17 @@ class LinkedinController < ApplicationController
   	init_client
     @c = session[:linkedin_client]
     @profile1 = @c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
+  	generate_doc
+  end
+
+  def generate_doc
+  	source = 'app/assets/docs/template/template.docx'
+		destination = 'app/assets/docs/output/resume.docx'
+		FileUtils.cp source, destination
   end
  
   def download
-  	send_file("#{Rails.root}/app/assets/docs/template.docx")
+  	send_file("#{Rails.root}/app/assets/docs/template/template.docx")
   end
 
   def auth
@@ -48,5 +55,5 @@ class LinkedinController < ApplicationController
   	session[:linkedin_client] = nil
   	redirect_to root_path
   end
-  
+
 end
