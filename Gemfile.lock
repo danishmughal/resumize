@@ -54,6 +54,9 @@ GEM
     doccy-api (0.0.3)
       httparty
       json
+    docx_templater (0.1.1)
+      htmlentities (~> 4.3.1)
+      rubyzip (~> 0.9.9)
     docxtor (0.2.1)
       builder
       rubytree
@@ -62,6 +65,7 @@ GEM
     execjs (2.0.2)
     hashie (2.0.5)
     hike (1.2.3)
+    htmlentities (4.3.1)
     httparty (0.12.0)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -157,6 +161,7 @@ DEPENDENCIES
   binding_of_caller
   coffee-rails (~> 4.0.0)
   doccy-api (~> 0.0.3)
+  docx_templater
   docxtor (~> 0.2.1)
   httparty
   jbuilder (~> 1.2)

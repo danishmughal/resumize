@@ -70,4 +70,6 @@ gem 'doccy-api', '~> 0.0.3'
 
 gem 'httparty'
 
+gem 'docx_templater'
+
 # =============================
