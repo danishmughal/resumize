@@ -10,126 +10,105 @@ class LinkedinController < ApplicationController
   end
 
   def processed
+  	require 'docx_templater'
+
   	init_client
     @c = session[:linkedin_client]
-    @profile1 = @c.profile(:fields=>["first_name","last_name","headline","public_profile_url","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
-  
-    @name = @c.profile(:fields=>["first_name"])
-  end
 
-  def download
-  	require 'docx_templater'
-  	name = 'Ali Khan Afridi'
-		contact = 'afridi2@illinois.edu'
-		summary = 'Computer Science student interested in web and mobile development'
+    # Getting the name, contact number, summary
+    @profile1 = @c.profile(:fields=>["first_name","last_name","summary","date-of-birth","main_address","phone-numbers","primary-twitter-account","twitter-accounts","location"])
+    @profile1 = @profile1.to_hash
+	    @user_name = @profile1["first_name"] + " " + @profile1["last_name"]
+	    @user_contact = @profile1["phone_numbers"]["all"].first["phone_number"]
+	    @user_summary = @profile1["summary"]
 
-		heading1 = '1'
-		title1_1 = '1'
-		description1_1 = '1'
+    # Getting 3 jobs and their descriptions, etc.
+    @profile2 = @c.profile(:fields=>["positions","three_current_positions","three_past_positions"])
+    @profile2 = @profile2.to_hash
+	    @user_job_1 = @profile2["positions"]["all"].first["company"]["name"]
+	    @user_job_1_title = @profile2["positions"]["all"].first["title"]
+	    @user_job_1_summary = @profile2["positions"]["all"].first["summary"]
+
+	    @user_job_2 = @profile2["positions"]["all"].second["company"]["name"]
+	    @user_job_2_title = @profile2["positions"]["all"].second["title"]
+	    @user_job_2_summary = @profile2["positions"]["all"].second["summary"]
+
+	    @user_job_3 = @profile2["positions"]["all"].third["company"]["name"]
+	    @user_job_3_title = @profile2["positions"]["all"].third["title"]
+	    @user_job_3_summary = @profile2["positions"]["all"].third["summary"]
+
+	  # Getting education and skills of the user
+    @profile3 = @c.profile(:fields=>["skills","educations"])
+    @profile3 = @profile3.to_hash
+    	@user_school = @profile3["educations"]["all"].first["school_name"]
+    	@user_graduationyear = @profile3["educations"]["all"].first["end_date"]["year"]
+    	@user_degree = @profile3["educations"]["all"].first["degree"] + " - " + @profile3["educations"]["all"].first["field_of_study"]
+
+    	@user_skills = @profile3["skills"]["all"][0..8]
+
+
+    # Some placeholder variables for document generation:
 		location1_1 = '1'
 		dates1_1 = '1'
 
-		title1_2 = '2'
-		description1_2 = '2'
 		location1_2 = '2'
 		dates1_2 = '2'
 
-		title1_3 = '3'
-		description1_3 = '3'
 		location1_3 = '3'
 		dates1_3 = '3'
 
-
-		heading2 = '2'
-		title2_1 = '1'
-		description2_1 = '1'
 		location2_1 = '1'
 		dates2_1 = '1'
-
-
-		heading3 = 'Skills'
-		title3_1 ='Java / Android'
-		title3_2 = 'C/C++'
-		title3_3 ='Ruby'
-		title3_4 = 'Version Control (Git/Svn)'
-		title3_5 ='Arduino'
-		title3_6 = 'HTML/CSS'
-		title3_7 ='LaTeX'
-		title3_8 = 'IBM SPSS'
-
-
-		heading4 = 'Activities / Awards'
-		title4_1 = 'ThinkChicago 2013'
-		description4_1 = 'Invited by Mayor of Chicago to visit the city of chicago and meet the top innovators of the city'
-
-		title4_2 = 'Beta Theta Pi'
-		description4_2 = ''
-
-		title4_3 = 'Campus 1871'
-		description4_3 = ''
-
-		heading5 = 'Activities / Awards'
-		title5_1 = 'ThinkChicago 2013'
-		description5_1 = 'Invited by Mayor of Chicago to visit the city of chicago and meet the top innovators of the city'
-
-		title5_2 = 'Beta Theta Pi'
-		description5_2 = ''
-
-		title5_3 = 'Campus 1871'
-		description5_3 = ''
 
   	source = 'app/assets/docs/template/template.docx'
 		buffer = DocxTemplater.new.replace_file_with_content(source,
 		  {
-        :NAME => name, 
-        :CONTACT => contact, 
-        :SUMMARY => summary, 
-        :Heading1 => heading1,
-        :Title11 => title1_1,
-        :Description11 => description1_1,
+        :NAME => @user_name, 
+        :CONTACT => @user_contact, 
+        :SUMMARY => @user_summary, 
+
+        :Heading1 => "Work Experience",
+        :Title11 => @user_job_1_title,
+        :Description11 => @user_job_1_summary,
         :Location11 => location1_1,
         :Dates11 => dates1_1,
-        :Title12 => title1_2,
-        :Description12 => description1_2,
+
+        :Title12 => @user_job_2_title,
+        :Description12 => @user_job_2_summary,
         :Location12 => location1_2,
         :Dates12 => dates1_2,
-        :Title13 => title1_3,
-        :Description13 => description1_3,
+
+        :Title13 => @user_job_3_title,
+        :Description13 => @user_job_3_summary,
         :Location13 => location1_3,
         :Dates13 => dates1_3,
-        :Heading2 => heading2,
-        :Title21 => title2_1,
-        :Description21 => description2_1,
-        :Location21 => location2_1,
-        :Dates21 => dates2_1,
-        :Heading3 => heading3,
-        :Title31 => title3_1,
-        :Title32 => title3_2,
-        :Title33 => title3_3,
-        :Title34 => title3_4,
-        :Title35 => title3_5,
-        :Title36 => title3_6,
-        :Title37 => title3_7,
-        :Title38 => title3_8,
-        :Heading4 => heading4,
-        :Title41 => title4_1,
-        :Description41 => description4_1,
-        :Title42 => title4_2,
-        :Description42 => description4_2,
-        :Title43 => title4_3,
-        :Description43 => description4_3,
-        :Heading5 => heading5,
-        :Title51 => title4_1,
-        :Description51 => description5_1,
-        :Title52 => title4_2,
-        :Description52 => description5_2,
-        :Title53 => title4_3,
-        :Description53 => description5_3,
- 		  })
 
-		# Sending the document to the user
-		send_data buffer.string, :filename => 'YourResume.docx'
-		
+        :Heading2 => "Education",
+        :Title21 => @user_school,
+        :Description21 => @user_degree,
+        :Location21 => location2_1,
+        :Dates21 => @user_graduationyear,
+
+        :Heading3 => "Skills",
+        :Title31 => @user_skills[0]["skill"]["name"],
+        :Title32 => @user_skills[1]["skill"]["name"],
+        :Title33 => @user_skills[2]["skill"]["name"],
+        :Title34 => @user_skills[3]["skill"]["name"],
+        :Title35 => @user_skills[4]["skill"]["name"],
+        :Title36 => @user_skills[5]["skill"]["name"],
+        :Title37 => @user_skills[6]["skill"]["name"],
+        :Title38 => @user_skills[7]["skill"]["name"],
+
+ 		  })
+	
+			# Sending the document to the user
+			send_data buffer.string, :filename => 'YourResume.docx'
+
+
+  end
+
+  def download
+
   end
  
 

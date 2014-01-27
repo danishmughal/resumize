@@ -1,3 +1,4 @@
 == Resumizer
 
-Convert your LinkedIn profile into a docx in a single click.
+Convert your LinkedIn profile into a docx in a single [click](http://resumize.herokuapp.com).
+
